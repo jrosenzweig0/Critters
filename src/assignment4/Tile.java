@@ -1,9 +1,11 @@
 package assignment4;
 
+import java.util.*;
+
 public class Tile {
 	private int x;
 	private int y;
-	private boolean filled;
+	private ArrayList<Critter> filled - new ArrayList<Critter>;
 	
 	public int[] getPosition() {
 		int[] position = new int[]{this.x,this.y};
@@ -20,11 +22,11 @@ public class Tile {
 		this.y = position[1];
 	}
 	
-	public boolean isFilled() {
+	public ArrayList<Critter> isFilled() {
 		return this.filled;
 	}
 	
-	public void setFilled(boolean filled) {
-		this.filled = filled;
+	public void setFilled(Critter filled) {
+		this.filled.add(filled);
 	}
 }
