@@ -2,30 +2,45 @@ package assignment4;
 
 import java.util.*;
 
+/**
+ * This class stores the list of critters that are on a particular tile.
+ * At the end of each time step, we loop through each tile and if there is more than one critter on a particuler
+ * tile, then we will deal with encounters
+ * @author jonathan
+ *
+ */
 public class Tile {
-	private int x;
-	private int y;
-	private ArrayList<Critter> filled - new ArrayList<Critter>;
+	private int x; // the x position of the tile
+	private int y; // the y position of the tile
+	private ArrayList<Critter> filled; // A list of the critters on a particular tile
 	
+	public Tile(int x, int y) {
+		this.x = x;
+		this.y = y;
+		this.filled = new ArrayList<Critter>();
+	}
+	/**
+	 * This method gets the position of a specific tile. I am not sure if we will need it or not
+	 * @return returns an array that contains the position in the form [x,y]
+	 */
 	public int[] getPosition() {
 		int[] position = new int[]{this.x,this.y};
 		return position;
 	}
 	
-	public void setPosition(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-	
-	public void setPosition(int[] position) {
-		this.x = position[0];
-		this.y = position[1];
-	}
-	
-	public ArrayList<Critter> isFilled() {
+	/**
+	 * This method returns the list of critters on a particular tile.
+	 * @return returns list of critters on a particular tile. If there are no critters than it will return an 
+	 * empty ArrayList
+	 */
+	public ArrayList<Critter> crittersOnTile() {
 		return this.filled;
 	}
 	
+	/**
+	 * This method adds a critter to a tile
+	 * @param filled is the critter objsct that we are adding to the list of critters that are on the Tile
+	 */
 	public void setFilled(Critter filled) {
 		this.filled.add(filled);
 	}
