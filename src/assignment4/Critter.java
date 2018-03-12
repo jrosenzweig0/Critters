@@ -51,8 +51,8 @@ public abstract class Critter {
 	private int y_coord;
 	/**
 	 * This method simulates a critter walking
-	 * @param direction is the direction the critter moves. it is an integer between 0 and 7 where 0 represents moving right
-	 * 1 represents moving right and up and so on
+	 * @param direction is the direction the critter moves. it is an integer between 0 and 7 where 
+	 * 0 represents moving right 1 represents moving right and up and so on
 	 */
 	protected final void walk(int direction) {
 		if (this.energy > Params.walk_energy_cost) {
@@ -67,8 +67,8 @@ public abstract class Critter {
 	
 	/**
 	 * This method simulates a critter running
-	 * @param direction is the direction the critter moves. it is an integer between 0 and 7 where 0 represents moving right
-	 * 1 represents moving right and up and so on
+	 * @param direction is the direction the critter moves. it is an integer between 0 and 7 where 0 
+	 * represents moving right 1 represents moving right and up and so on
 	 */
 	protected final void run(int direction) {
 		if (this.energy > Params.run_energy_cost) {
@@ -98,7 +98,23 @@ public abstract class Critter {
 		}
 	}
 	
+	/**
+	 * This method takes the offspring that another critter produced and initialized it giving
+	 * it half of the parents energy rounded down and putting it in a position next to 
+	 * the parent indicated by the direction parameter
+	 * @param offspring is the reference to the critter that the parent created
+	 * @param direction is an integer between 0 and 7 that represents the direction
+	 */
 	protected final void reproduce(Critter offspring, int direction) {
+		if (this.energy < Params.min_reproduce_energy) {
+			return;
+		}
+		offspring.energy = this.energy/2;
+		this.energy = this.energy - offspring.energy;
+		offspring.x_coord = this.x_coord;
+		offspring.y_coord = this.y_coord;
+		offspring.move(direction);
+		babies.add(offspring);
 	}
 
 	public abstract void doTimeStep();
