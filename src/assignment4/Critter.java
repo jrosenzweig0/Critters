@@ -49,12 +49,53 @@ public abstract class Critter {
 	
 	private int x_coord;
 	private int y_coord;
-	
+	/**
+	 * This method simulates a critter walking
+	 * @param direction is the direction the critter moves. it is an integer between 0 and 7 where 0 represents moving right
+	 * 1 represents moving right and up and so on
+	 */
 	protected final void walk(int direction) {
+		if (this.energy > Params.walk_energy_cost) {
+			this.energy -= Params.walk_energy_cost;
+			this.move(direction);
+		}
+		else {
+			this.energy = 0;
+			population.remove(this);
+		}
 	}
 	
+	/**
+	 * This method simulates a critter running
+	 * @param direction is the direction the critter moves. it is an integer between 0 and 7 where 0 represents moving right
+	 * 1 represents moving right and up and so on
+	 */
 	protected final void run(int direction) {
-		
+		if (this.energy > Params.run_energy_cost) {
+			this.energy -= Params.run_energy_cost;
+			this.move(direction);
+			this.move(direction);
+		}
+		else {
+			this.energy = 0;
+			population.remove(this);
+		}
+	}
+	/**
+	 * This method moves the critter one tile in the specified direction
+	 * @param direction is an integer between 0 and 7 that specifies the direction the critter moves
+	 */
+	private void move(int direction) {
+		switch (direction) {
+		case 0: x_coord += 1; break;
+		case 1: x_coord += 1; y_coord -= 1; break;
+		case 2: y_coord -= 1; break;
+		case 3: y_coord -= 1; x_coord -= 1; break;
+		case 4: x_coord -= 1; break;
+		case 5: x_coord -= 1; y_coord += 1; break;
+		case 6: y_coord += 1; break;
+		case 7: y_coord += 1; x_coord += 1; break;
+		}
 	}
 	
 	protected final void reproduce(Critter offspring, int direction) {
