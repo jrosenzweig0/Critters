@@ -14,7 +14,7 @@ package assignment4;
 
 
 import java.util.List;
-
+import java.util.*;
 /* see the PDF for descriptions of the methods and fields in this class
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
  * no new public, protected or default-package code or data can be added to Critter
@@ -25,6 +25,7 @@ public abstract class Critter {
 	private static String myPackage;
 	private	static List<Critter> population = new java.util.ArrayList<Critter>();
 	private static List<Critter> babies = new java.util.ArrayList<Critter>();
+	private static Map<Integer, Map<Integer, Tile>> world; //2D map (Since we have 2 keys: x,y) holding the tile objects
 
 	// Gets the package name.  This assumes that Critter and its subclasses are all in the same package.
 	static {
@@ -42,7 +43,7 @@ public abstract class Critter {
 	
 	
 	/* a one-character long string that visually depicts your critter in the ASCII interface */
-	public String toString() { return ""; }
+	public String toString() { return "%"; }
 	
 	private int energy = 0;
 	protected int getEnergy() { return energy; }
@@ -61,7 +62,7 @@ public abstract class Critter {
 		}
 		else {
 			this.energy = 0;
-			population.remove(this);
+			death();
 		}
 	}
 	
@@ -78,7 +79,7 @@ public abstract class Critter {
 		}
 		else {
 			this.energy = 0;
-			population.remove(this);
+			death();
 		}
 	}
 	/**
@@ -117,6 +118,14 @@ public abstract class Critter {
 		babies.add(offspring);
 	}
 
+	/**
+	 * This method effectively kills a critter
+	 */
+	private void death(){
+		population.remove(this);
+		(world.get(this.y_coord).get(this.x_coord)).remove(this);
+	}
+
 	public abstract void doTimeStep();
 	public abstract boolean fight(String oponent);
 	
@@ -132,6 +141,21 @@ public abstract class Critter {
 	 */
 	public static void makeCritter(String critter_class_name) throws InvalidCritterException {
 	}
+
+	/**
+	 * Fills the world Map with Tiles
+	 */
+	private static void createWorld(){
+		world = new HashMap<Integer, Map<Integer, Tile>>(); 		//Map holding the Maps of each row
+		for (int i=0; i<Params.world_height; i++){  				//i represents the y coordinate
+			Map<Integer, Tile> row = new HashMap<Integer, Tile>();  //Map of all of the tiles with y coordinate i
+			for (int j=0; j<Params.world_width; j++){ 				//j represents the x coordinate
+				Tile newTile = new Tile(j,i);
+				row.put(j, newTile);
+			}
+			world.put(i, row);
+		}
+	}
 	
 	/**
 	 * Gets a list of critters of a specific type.
@@ -144,7 +168,7 @@ public abstract class Critter {
 	
 		return result;
 	}
-	
+
 	/**
 	 * Prints out how many Critters of each type there are on the board.
 	 * @param critters List of Critters.

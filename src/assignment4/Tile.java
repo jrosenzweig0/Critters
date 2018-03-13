@@ -44,4 +44,12 @@ public class Tile {
 	public void setFilled(Critter filled) {
 		this.filled.add(filled);
 	}
+
+	/**
+	 * This method removes a critter from the tile
+	 * @param dead is the critter object that we are removing from the list of critters that are on the Tile
+	 */
+	public void remove(Critter dead){
+		this.filled.remove(dead);
+	}
 }
