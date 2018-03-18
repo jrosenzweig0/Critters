@@ -62,7 +62,7 @@ public abstract class Critter {
 		}
 		else {
 			this.energy = 0;
-			death();
+			this.death();
 		}
 	}
 	
@@ -79,7 +79,7 @@ public abstract class Critter {
 		}
 		else {
 			this.energy = 0;
-			death();
+			this.death();
 		}
 	}
 	/**
