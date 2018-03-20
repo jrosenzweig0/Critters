@@ -13,8 +13,8 @@ package assignment4;
  */
 
 
-import java.util.List;
 import java.util.*;
+
 /* see the PDF for descriptions of the methods and fields in this class
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
  * no new public, protected or default-package code or data can be added to Critter
@@ -140,7 +140,13 @@ public abstract class Critter {
 	 * @throws InvalidCritterException
 	 */
 	public static void makeCritter(String critter_class_name) throws InvalidCritterException {
-		Class c = Class.forName(critter_class_name);
+		try {
+			Class c = Class.forName(critter_class_name);
+			//(c.getClasses()) c.newInstance();
+		} 
+		catch (ClassNotFoundException e){
+			
+		}
 
 	}
 
@@ -269,6 +275,18 @@ public abstract class Critter {
 				}
 			}
 		}
+		//do encounters
+		for(Critter c: population) {
+			c.energy -= Params.rest_energy_cost;
+			if(c.energy <= 0)
+				c.death();
+		}
+		//generate algae
+		for(Critter baby: babies) {
+			population.add(baby);
+		}
+		babies.clear();
+		
 	}
 	
 	public static void displayWorld() {
