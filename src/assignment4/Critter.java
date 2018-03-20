@@ -26,6 +26,7 @@ public abstract class Critter {
 	private	static List<Critter> population = new java.util.ArrayList<Critter>();
 	private static List<Critter> babies = new java.util.ArrayList<Critter>();
 	private static Map<Integer, Map<Integer, Tile>> world; //2D map (Since we have 2 keys: x,y) holding the tile objects
+	private static boolean firstTime = true;
 
 	// Gets the package name.  This assumes that Critter and its subclasses are all in the same package.
 	static {
@@ -87,6 +88,8 @@ public abstract class Critter {
 	 * @param direction is an integer between 0 and 7 that specifies the direction the critter moves
 	 */
 	private void move(int direction) {
+		if (population.contains(this)) world.get(y_coord).get(x_coord).remove(this);
+
 		switch (direction) {
 		case 0: x_coord += 1; break;
 		case 1: x_coord += 1; y_coord -= 1; break;
@@ -97,6 +100,8 @@ public abstract class Critter {
 		case 6: y_coord += 1; break;
 		case 7: y_coord += 1; x_coord += 1; break;
 		}
+
+		if (population.contains(this)) world.get(y_coord).get(x_coord).setFilled(this);
 	}
 	
 	/**
@@ -126,6 +131,44 @@ public abstract class Critter {
 		(world.get(this.y_coord).get(this.x_coord)).remove(this);
 	}
 
+	/**
+	 * Determine the result of an encounter between 2 Critters
+	 * @param A Critter encountering B
+	 * @param B Critter encountering A
+	 */
+	private static void encounter(Critter A, Critter B){
+		if(!A.fight(B.toString())) {				//Determine if A will run or fight
+			A.run(getRandomInt(8));
+			return;
+		}
+		if(!B.fight(A.toString())) {				//Determine if B will run or fight
+			B.run(getRandomInt(8));
+			return;
+		}
+		int aAttack = getRandomInt(A.energy+1);	//Determine attack value of A and B based on energy and RNG
+		int bAttack = getRandomInt(B.energy+1);
+		if (aAttack > bAttack){						//The one with the higher attack gains half the other's energy and lives
+			A.energy += (B.energy)/2;
+			B.death();
+		}
+		else if (bAttack > aAttack){
+			B.energy += (A.energy)/2;
+			A.death();
+		}
+		else {
+			int winner = getRandomInt(2);		//If they have the same attack value, randomly decide winner
+			if (winner == 0) {
+				A.energy += (B.energy)/2;
+				B.death();
+			}
+			else {
+				B.energy += (A.energy)/2;
+				A.death();
+			}
+		}
+	}
+
+
 	public abstract void doTimeStep();
 	public abstract boolean fight(String oponent);
 	
@@ -140,8 +183,7 @@ public abstract class Critter {
 	 * @throws InvalidCritterException
 	 */
 	public static void makeCritter(String critter_class_name) throws InvalidCritterException {
-		Class c = Class.forName(critter_class_name);
-
+		
 	}
 
 	/**
@@ -258,10 +300,14 @@ public abstract class Critter {
 	 * Calls doTimeStep for each critter in the world, then resolves Tiles with more than one critter
 	 */
 	public static void worldTimeStep() {
-		for (int i=0; i<population.size(); i++){
+		if (firstTime) {												//if this is the first worldTimeStep create world
+			createWorld();
+			firstTime = false;
+		}
+		for (int i=0; i<population.size(); i++){						//call each Critter's doTimeStep
 			population.get(i).doTimeStep();
 		}
-		for (int i=0; i<Params.world_height; i++){
+		for (int i=0; i<Params.world_height; i++){						//find any Tile with more than one critter, and have them fight
 			for(int j=0; j<Params.world_width; j++){
 				ArrayList<Critter> crits = world.get(i).get(j).crittersOnTile();
 				while(crits.size()>1){
