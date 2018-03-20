@@ -194,11 +194,14 @@ public abstract class Critter {
 	 * @param critter_class_name
 	 * @throws InvalidCritterException
 	 */
-	public static void makeCritter(String critter_class_name) throws InvalidCritterException {
+	 public static void makeCritter(String critter_class_name) throws InvalidCritterException {
 
 
-			//Class c = Class.forName(critter_class_name);
-			//(c.getClasses()) c.newInstance();
+		//Class c = Class.forName(critter_class_name);
+			//instead of using try catch make it throw an InvalidCritterEception
+		//(c.getClasses()) c.newInstance();
+			//make new instance
+			//call constructor with paramaters
 
 
 	}
