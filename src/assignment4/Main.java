@@ -78,9 +78,16 @@ public class Main {
 	        case "show":
 	        	Critter.displayWorld();
 	        case "step":
-	        	//int numSteps = kb.nextInt();
+	        	if(kb.hasNextInt()) {
+	        		for(int i = 0; i<kb.nextInt(); i++) {
+	        			Critter.worldTimeStep();
+	        		}
+	        	}
+	        	else {
+	        		Critter.worldTimeStep();
+	        	}
 	        case "seed":
-	        	//int numSeeds = kb.nextInt();
+	        	Critter.setSeed(kb.nextLong());
 	        case "make":
 	        	
 	        case "stats":
