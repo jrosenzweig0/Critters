@@ -2,9 +2,9 @@ package assignment4;
 /* CRITTERS Critter.java
  * EE422C Project 4 submission by
  * Replace <...> with your actual data.
- * <Student1 Name>
- * <Student1 EID>
- * <Student1 5-digit Unique No.>
+ * <Jonathan Rosenzweig>
+ * <JJR3349>
+ * <15466>
  * <Student2 Name>
  * <Student2 EID>
  * <Student2 5-digit Unique No.>
@@ -27,6 +27,7 @@ public abstract class Critter {
 	private static List<Critter> babies = new java.util.ArrayList<Critter>();
 	private static Map<Integer, Map<Integer, Tile>> world; //2D map (Since we have 2 keys: x,y) holding the tile objects
 	private static boolean firstTime = true;
+	private boolean hasMoved;
 
 	// Gets the package name.  This assumes that Critter and its subclasses are all in the same package.
 	static {
@@ -59,7 +60,7 @@ public abstract class Critter {
 	protected final void walk(int direction) {
 		if (this.energy > Params.walk_energy_cost) {
 			this.energy -= Params.walk_energy_cost;
-			this.move(direction);
+			this.move(direction, 1);
 		}
 		else {
 			this.energy = 0;
@@ -75,8 +76,8 @@ public abstract class Critter {
 	protected final void run(int direction) {
 		if (this.energy > Params.run_energy_cost) {
 			this.energy -= Params.run_energy_cost;
-			this.move(direction);
-			this.move(direction);
+			this.move(direction, 2);
+
 		}
 		else {
 			this.energy = 0;
@@ -87,21 +88,32 @@ public abstract class Critter {
 	 * This method moves the critter one tile in the specified direction
 	 * @param direction is an integer between 0 and 7 that specifies the direction the critter moves
 	 */
-	private void move(int direction) {
-		if (population.contains(this)) world.get(y_coord).get(x_coord).remove(this);
-
-		switch (direction) {
-		case 0: x_coord += 1; break;
-		case 1: x_coord += 1; y_coord -= 1; break;
-		case 2: y_coord -= 1; break;
-		case 3: y_coord -= 1; x_coord -= 1; break;
-		case 4: x_coord -= 1; break;
-		case 5: x_coord -= 1; y_coord += 1; break;
-		case 6: y_coord += 1; break;
-		case 7: y_coord += 1; x_coord += 1; break;
+	private void move(int direction, int distance) {
+		if(!this.hasMoved) {
+			if (population.contains(this)) world.get(y_coord).get(x_coord).remove(this);
+	
+			switch (direction) {
+			case 0: this.x_coord += distance; break;
+			case 1: this.x_coord += distance; this.y_coord -= distance; break;
+			case 2: this.y_coord -= distance; break;
+			case 3: this.y_coord -= distance; this.x_coord -= distance; break;
+			case 4: this.x_coord -= distance; break;
+			case 5: this.x_coord -= distance; this.y_coord += distance; break;
+			case 6: this.y_coord += distance; break;
+			case 7: this.y_coord += distance; this.x_coord += distance; break;
+			}
+	
+			if (population.contains(this)) world.get(y_coord).get(x_coord).setFilled(this);
+			
+			this.hasMoved = true;
 		}
-
-		if (population.contains(this)) world.get(y_coord).get(x_coord).setFilled(this);
+	}
+	
+	private void warp() {
+		world.get(this.y_coord).get(this.x_coord).remove(this);
+		this.x_coord = this.x_coord % Params.world_width;
+		this.y_coord = this.y_coord % Params.world_height;
+		world.get(this.y_coord).get(this.x_coord).setFilled(this);
 	}
 	
 	/**
@@ -119,7 +131,7 @@ public abstract class Critter {
 		this.energy = this.energy - offspring.energy;
 		offspring.x_coord = this.x_coord;
 		offspring.y_coord = this.y_coord;
-		offspring.move(direction);
+		offspring.move(direction, 1);
 		babies.add(offspring);
 	}
 
@@ -184,13 +196,10 @@ public abstract class Critter {
 	 */
 	public static void makeCritter(String critter_class_name) throws InvalidCritterException {
 
-		try {
-			Class c = Class.forName(critter_class_name);
+
+			//Class c = Class.forName(critter_class_name);
 			//(c.getClasses()) c.newInstance();
-		} 
-		catch (ClassNotFoundException e){
-			
-		}
+
 
 	}
 
@@ -320,13 +329,20 @@ public abstract class Critter {
 			createWorld();
 			firstTime = false;
 		}
-		for (int i=0; i<population.size(); i++){						//call each Critter's doTimeStep
+		for (int i=0; i<population.size(); i++){//call each Critter's doTimeStep
+			population.get(i).hasMoved = false;
 			population.get(i).doTimeStep();
 		}
+		
+		for(Critter c: population) {
+			c.warp();
+		}
+		
 		for (int i=0; i<Params.world_height; i++){						//find any Tile with more than one critter, and have them fight
 			for(int j=0; j<Params.world_width; j++){
 				ArrayList<Critter> crits = world.get(i).get(j).crittersOnTile();
 				while(crits.size()>1){
+					Collections.shuffle(crits);
 					encounter(crits.get(0), crits.get(1));
 				}
 			}
@@ -339,7 +355,7 @@ public abstract class Critter {
 		}
 		//generate algae
 		for(Critter baby: babies) {
-			population.add(baby);
+			baby.warp();
 		}
 		babies.clear();
 		
