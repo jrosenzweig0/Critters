@@ -301,7 +301,15 @@ public abstract class Critter {
 	 * Clear the world of all critters, dead and alive
 	 */
 	public static void clearWorld() {
-		// Complete this method.
+		babies.clear();
+		for(Critter c: population) {
+			c.death();
+		}
+		for (int i=0; i<Params.world_height; i++){						//find any Tile with more than one critter, and have them fight
+			for(int j=0; j<Params.world_width; j++){
+				world.get(i).get(j).setAlgae(false);
+			}
+		}
 	}
 
 	/**
@@ -319,11 +327,11 @@ public abstract class Critter {
 			for(int j=0; j<Params.world_width; j++){
 				ArrayList<Critter> crits = world.get(i).get(j).crittersOnTile();
 				while(crits.size()>1){
-					crits.get(0).fight(crits.get(1).toString());
+					encounter(crits.get(0), crits.get(1));
 				}
 			}
 		}
-		//do encounters
+
 		for(Critter c: population) {
 			c.energy -= Params.rest_energy_cost;
 			if(c.energy <= 0)
