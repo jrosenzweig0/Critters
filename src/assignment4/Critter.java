@@ -140,6 +140,8 @@ public abstract class Critter {
 	 * @throws InvalidCritterException
 	 */
 	public static void makeCritter(String critter_class_name) throws InvalidCritterException {
+		Class c = Class.forName(critter_class_name);
+
 	}
 
 	/**
@@ -251,9 +253,22 @@ public abstract class Critter {
 	public static void clearWorld() {
 		// Complete this method.
 	}
-	
+
+	/**
+	 * Calls doTimeStep for each critter in the world, then resolves Tiles with more than one critter
+	 */
 	public static void worldTimeStep() {
-		// Complete this method.
+		for (int i=0; i<population.size(); i++){
+			population.get(i).doTimeStep();
+		}
+		for (int i=0; i<Params.world_height; i++){
+			for(int j=0; j<Params.world_width; j++){
+				ArrayList<Critter> crits = world.get(i).get(j).crittersOnTile();
+				while(crits.size()>1){
+					crits.get(0).fight(crits.get(1).toString());
+				}
+			}
+		}
 	}
 	
 	public static void displayWorld() {
