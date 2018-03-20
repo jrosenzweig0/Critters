@@ -15,7 +15,6 @@ package assignment4;
 import java.util.Scanner;
 import java.io.*;
 
-
 /*
  * Usage: java <pkgname>.Main <input file> test
  * input file is optional.  If input file is specified, the word 'test' is optional.
@@ -66,16 +65,40 @@ public class Main {
         } else { // if no arguments to main
             kb = new Scanner(System.in); // use keyboard and console
         }
-
-        /* Do not alter the code above for your submission. */
-        /* Write your code below. */
+        //parse and make input command
+        String command = kb.next().toLowerCase();
+        boolean quitted = false;
         
-        // System.out.println("GLHF");
-        
-        /* Write your code above */
-        System.out.flush();
+        while(true){
+        	//System.out.println(command);
+	        switch (command) {
+	        case "quit":
+	        	quitted = true;
+	        	break;
+	        case "show":
+	        	Critter.displayWorld();
+	        case "step":
+	        	//int numSteps = kb.nextInt();
+	        case "seed":
+	        	//int numSeeds = kb.nextInt();
+	        case "make":
+	        	
+	        case "stats":
+	        }
+	        if (quitted) {
+	        	break;
+	        }
+	        /* Do not alter the code above for your submission. */
+	        /* Write your code below. */
+	        
+	        // System.out.println("GLHF");
+	        
+	        /* Write your code above */
+        }
+        //System.out.flush();
 
     }
+
 
 
 }
