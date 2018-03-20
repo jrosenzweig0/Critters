@@ -66,9 +66,11 @@ public class Main {
             kb = new Scanner(System.in); // use keyboard and console
         }
         //parse and make input command
+        System.out.println("Input a command:");
         String command = kb.next().toLowerCase();
         boolean quitted = false;
         
+
         while(true){
         	//System.out.println(command);
 	        switch (command) {
