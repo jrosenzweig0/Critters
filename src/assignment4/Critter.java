@@ -256,8 +256,24 @@ public abstract class Critter {
 	 * @throws InvalidCritterException
 	 */
 	public static List<Critter> getInstances(String critter_class_name) throws InvalidCritterException {
-		List<Critter> result = new java.util.ArrayList<Critter>();
-	
+		List<Critter> result = new java.util.ArrayList<Critter>();		//List of Critters of critter_class_name type
+		try{															//try to access class critter_class_name...
+			if(!critterTypes.contains(critter_class_name)) {			//if invalid type throw invalid critter exception
+				throw new InvalidCritterException(critter_class_name);
+			}
+			Class<?> critterClass = Class.forName(critter_class_name); //get class corresponding to critter_class_name
+			for (int i=0; i<population.size(); i++){					//check each critter in population to see if they are critterClass
+				if (population.get(i).getClass() == critterClass){
+					result.add(population.get(i));						//if they are add them to result list
+				}
+			}
+		}
+		catch (InvalidCritterException e) {								//if InvalidCritterException print it
+			System.out.println(e);
+		}
+		catch (Exception e){											//if other exception print stack trace
+			e.printStackTrace();
+		}
 		return result;
 	}
 
