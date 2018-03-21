@@ -14,6 +14,7 @@ package assignment4;
 
 
 import java.util.*;
+import java.lang.reflect.Constructor;
 
 /* see the PDF for descriptions of the methods and fields in this class
  * you may add fields, methods or inner classes to Critter ONLY if you make your additions private
@@ -196,8 +197,15 @@ public abstract class Critter {
 	 */
 	 public static void makeCritter(String critter_class_name) throws InvalidCritterException {
 
+        //{
+		    Class<?> critterClass = Class.forName(critter_class_name);
+		    Constructor<?> ctor = critterClass.getConstructor(String.class);
+		    Critter c = (Critter) ctor.newInstance(new Object[] {ctorArgument});
 
-		//Class c = Class.forName(critter_class_name);
+        //}
+//        catch (InvalidClassExeption e){
+//            throw new InvalidCritterException("Not a Valid Critter!");
+//        }
 			//instead of using try catch make it throw an InvalidCritterEception
 		//(c.getClasses()) c.newInstance();
 			//make new instance
@@ -314,10 +322,10 @@ public abstract class Critter {
 	 */
 	public static void clearWorld() {
 		babies.clear();
-		for(Critter c: population) {
-			c.death();
+		for(int i = 0; i < population.size(); i++) {
+			population.get(0).death();
 		}
-		for (int i=0; i<Params.world_height; i++){						//find any Tile with more than one critter, and have them fight
+		for (int i=0; i<Params.world_height; i++){	 					//find any Tile with more than one critter, and have them fight
 			for(int j=0; j<Params.world_width; j++){
 				world.get(i).get(j).setAlgae(false);
 			}
@@ -351,10 +359,12 @@ public abstract class Critter {
 			}
 		}
 
-		for(Critter c: population) {
-			c.energy -= Params.rest_energy_cost;
-			if(c.energy <= 0)
-				c.death();
+		for(int i = 0; i < population.size(); i++) {
+			population.get(i).energy -= Params.rest_energy_cost;
+			if(population.get(i).energy <= 0) {
+				population.get(i).death();
+				i--;
+			}
 		}
 		//generate algae
 		for(Critter baby: babies) {
