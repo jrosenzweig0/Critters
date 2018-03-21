@@ -92,7 +92,7 @@ public class Main {
 	        	Critter.setSeed(kb.nextLong());
 	        case "make":
 	        	try {
-	        		Critter.makeCritter("Craig");
+	        		Critter.makeCritter("assignment4.Craig");
 	        	}
 	        	catch(InvalidCritterException e) {
 	        		System.out.println(e);
