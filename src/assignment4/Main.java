@@ -67,38 +67,48 @@ public class Main {
         }
         //parse and make input command
         System.out.println("Input a command:");
-        String command = kb.next().toLowerCase();
         boolean quitted = false;
+        String command;
         
-
+        //need to fix but kind of works
+        //need to change popuation to private and remake stats 
         while(true){
-        	//System.out.println(command);
-	        switch (command) {
+			command = kb.nextLine().toLowerCase();	
+			String[] arguments = command.split(" ");
+	        switch (arguments[0]) {
 	        case "quit":
 	        	quitted = true;
 	        	break;
 	        case "show":
 	        	Critter.displayWorld();
+	        	break;
 	        case "step":
-	        	if(kb.hasNextInt()) {
+	        	if(false) {
 	        		for(int i = 0; i<kb.nextInt(); i++) {
 	        			Critter.worldTimeStep();
+	        			break;
 	        		}
 	        	}
 	        	else {
 	        		Critter.worldTimeStep();
+	        		break;
 	        	}
 	        case "seed":
 	        	Critter.setSeed(kb.nextLong());
+	        	break;
 	        case "make":
 	        	try {
 	        		Critter.makeCritter("assignment4.Craig");
+	        		break;
 	        	}
 	        	catch(InvalidCritterException e) {
 	        		System.out.println(e);
+	        		break;
 	        	}
 	        	
 	        case "stats":
+	        	Critter.runStats(Critter.population);
+	        	break;
 	        }
 	        if (quitted) {
 	        	break;

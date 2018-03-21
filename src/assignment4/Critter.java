@@ -24,7 +24,7 @@ import java.lang.reflect.Constructor;
 
 public abstract class Critter {
 	private static String myPackage;
-	private	static List<Critter> population = new java.util.ArrayList<Critter>();
+	public	static List<Critter> population = new java.util.ArrayList<Critter>();
 	private static List<Critter> babies = new java.util.ArrayList<Critter>();
 	private static Map<Integer, Map<Integer, Tile>> world; //2D map (Since we have 2 keys: x,y) holding the tile objects
 	private static boolean firstTime = true;
@@ -91,7 +91,7 @@ public abstract class Critter {
 	 */
 	private void move(int direction, int distance) {
 		if(!this.hasMoved) {
-			if (population.contains(this)) world.get(y_coord).get(x_coord).remove(this);
+			if (population.contains(this)) world.get(this.y_coord).get(this.x_coord).remove(this);
 	
 			switch (direction) {
 			case 0: this.x_coord += distance; break;
@@ -103,18 +103,20 @@ public abstract class Critter {
 			case 6: this.y_coord += distance; break;
 			case 7: this.y_coord += distance; this.x_coord += distance; break;
 			}
-	
-			if (population.contains(this)) world.get(y_coord).get(x_coord).setFilled(this);
+			this.warp();
+			if (population.contains(this)) world.get(this.y_coord).get(this.x_coord).setFilled(this);
 			
 			this.hasMoved = true;
 		}
 	}
 	
 	private void warp() {
-		world.get(this.y_coord).get(this.x_coord).remove(this);
 		this.x_coord = this.x_coord % Params.world_width;
 		this.y_coord = this.y_coord % Params.world_height;
-		world.get(this.y_coord).get(this.x_coord).setFilled(this);
+		if(this.x_coord < 0)
+			this.x_coord = this.x_coord + Params.world_width;
+		if(this.y_coord < 0)
+			this.y_coord = this.y_coord + Params.world_height;
 	}
 	
 	/**
@@ -340,6 +342,7 @@ public abstract class Critter {
 	 * Calls doTimeStep for each critter in the world, then resolves Tiles with more than one critter
 	 */
 	public static void worldTimeStep() {
+		System.out.println(population.size());
 		if (firstTime) {												//if this is the first worldTimeStep create world
 			createWorld();
 			firstTime = false;
@@ -349,9 +352,6 @@ public abstract class Critter {
 			population.get(i).doTimeStep();
 		}
 		
-		for(Critter c: population) {
-			c.warp();
-		}
 		
 		for (int i=0; i<Params.world_height; i++){						//find any Tile with more than one critter, and have them fight
 			for(int j=0; j<Params.world_width; j++){
@@ -373,6 +373,7 @@ public abstract class Critter {
 		//generate algae
 		for(Critter baby: babies) {
 			baby.warp();
+			population.add(baby);
 		}
 		babies.clear();
 		
@@ -385,7 +386,7 @@ public abstract class Critter {
 		for(int i=0; i<Params.world_height; i++){							//For every row...
 			System.out.print('|');											//Prints edge
 			for(int j=0; j<Params.world_width; j++){						//Prints either space or critter symbol for every entry of row
-				if ((world.get(i).get(j)).crittersOnTile().size()>0)
+				if ((world.get(i).get(j) != null) && ((world.get(i).get(j)).crittersOnTile().size()>0))
 					System.out.print((world.get(i).get(j)).crittersOnTile().get(0).toString());
 				else System.out.print(' ');
 			}
