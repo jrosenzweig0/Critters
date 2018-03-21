@@ -91,6 +91,12 @@ public class Main {
 	        case "seed":
 	        	Critter.setSeed(kb.nextLong());
 	        case "make":
+	        	try {
+	        		Critter.makeCritter("Craig");
+	        	}
+	        	catch(InvalidCritterException e) {
+	        		System.out.println(e);
+	        	}
 	        	
 	        case "stats":
 	        }

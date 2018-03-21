@@ -29,7 +29,7 @@ public abstract class Critter {
 	private static Map<Integer, Map<Integer, Tile>> world; //2D map (Since we have 2 keys: x,y) holding the tile objects
 	private static boolean firstTime = true;
 	private boolean hasMoved;
-
+	private static HashSet<String> critterTypes = new HashSet<String>() {{add("Craig"); add("Algae");}};
 	// Gets the package name.  This assumes that Critter and its subclasses are all in the same package.
 	static {
 		myPackage = Critter.class.getPackage().toString().split(" ")[1];
@@ -197,20 +197,24 @@ public abstract class Critter {
 	 */
 	 public static void makeCritter(String critter_class_name) throws InvalidCritterException {
 
-        //{
+		 try{
+			if(!critterTypes.contains(critter_class_name)) {
+				throw new InvalidCritterException(critter_class_name);
+			}
 		    Class<?> critterClass = Class.forName(critter_class_name);
 		    Constructor<?> ctor = critterClass.getConstructor(String.class);
-		    Critter c = (Critter) ctor.newInstance(new Object[] {ctorArgument});
-
-        //}
-//        catch (InvalidClassExeption e){
-//            throw new InvalidCritterException("Not a Valid Critter!");
-//        }
-			//instead of using try catch make it throw an InvalidCritterEception
-		//(c.getClasses()) c.newInstance();
-			//make new instance
-			//call constructor with paramaters
-
+		    Critter newCritter = (Critter) ctor.newInstance();
+			newCritter.x_coord = Critter.getRandomInt(Params.world_width);
+			newCritter.y_coord = Critter.getRandomInt(Params.world_height);
+			newCritter.energy = Params.start_energy;
+			population.add(newCritter);
+		 }
+		 catch (InvalidCritterException e) {
+			 System.out.println(e);
+		 }
+		 catch (Exception e){
+			 e.printStackTrace();
+         }
 
 	}
 
