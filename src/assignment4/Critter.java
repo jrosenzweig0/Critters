@@ -377,8 +377,23 @@ public abstract class Critter {
 		babies.clear();
 		
 	}
-	
+
 	public static void displayWorld() {
-		// Complete this method.
+		System.out.print('+');												//Prints frame
+		for(int i=0; i<Params.world_width; i++){System.out.print('-');}
+		System.out.println('+');
+		for(int i=0; i<Params.world_height; i++){							//For every row...
+			System.out.print('|');											//Prints edge
+			for(int j=0; j<Params.world_width; j++){						//Prints either space or critter symbol for every entry of row
+				if ((world.get(i).get(j)).crittersOnTile().size()>0)
+					System.out.print((world.get(i).get(j)).crittersOnTile().get(0).toString());
+				else System.out.print(' ');
+			}
+			System.out.println('|');										//Prints edge
+		}
+		System.out.print('+');												//Prints frame
+		for(int i=0; i<Params.world_width; i++){System.out.print('-');}
+		System.out.println('+');
 	}
 }
+
