@@ -114,7 +114,6 @@ public class Main {
 		        		for(int i = 0; i < Integer.parseInt(arguments[1]); i++) {
 		        			Critter.makeCritter("assignment4.Craig");
 		        		}
-		        		Critter.makeCritter("assignment4.Craig");
 		        	}
 		        	catch(ArrayIndexOutOfBoundsException e) {
 		        		Critter.makeCritter("assignment4.Craig");

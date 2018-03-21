@@ -152,33 +152,46 @@ public abstract class Critter {
 	 * @param B Critter encountering A
 	 */
 	private static void encounter(Critter A, Critter B){
+		if(A.toString() == "@") {
+			B.energy += A.energy/2;
+			A.death();
+			//System.out.println("I ate an algee most likley");
+			return;
+		}
+		if(B.toString() == "@") {
+			A.energy += B.energy/2;
+			B.death();
+			//System.out.println("I ate an algee most likley");
+			return;
+		}
 		if(!A.fight(B.toString())) {				//Determine if A will run or fight
 			A.run(getRandomInt(8));
-			return;
 		}
 		if(!B.fight(A.toString())) {				//Determine if B will run or fight
 			B.run(getRandomInt(8));
-			return;
 		}
-		int aAttack = getRandomInt(A.energy+1);	//Determine attack value of A and B based on energy and RNG
-		int bAttack = getRandomInt(B.energy+1);
-		if (aAttack > bAttack){						//The one with the higher attack gains half the other's energy and lives
-			A.energy += (B.energy)/2;
-			B.death();
-		}
-		else if (bAttack > aAttack){
-			B.energy += (A.energy)/2;
-			A.death();
-		}
-		else {
-			int winner = getRandomInt(2);		//If they have the same attack value, randomly decide winner
-			if (winner == 0) {
+		if(A.x_coord == B.x_coord && A.y_coord == B.y_coord) {
+
+			int aAttack = getRandomInt(A.energy+1);	//Determine attack value of A and B based on energy and RNG
+			int bAttack = getRandomInt(B.energy+1);
+			if (aAttack > bAttack){						//The one with the higher attack gains half the other's energy and lives
 				A.energy += (B.energy)/2;
 				B.death();
 			}
-			else {
+			else if (bAttack > aAttack){
 				B.energy += (A.energy)/2;
 				A.death();
+			}
+			else {
+				int winner = getRandomInt(2);		//If they have the same attack value, randomly decide winner
+				if (winner == 0) {
+					A.energy += (B.energy)/2;
+					B.death();
+				}
+				else {
+					B.energy += (A.energy)/2;
+					A.death();
+				}
 			}
 		}
 	}
@@ -340,7 +353,7 @@ public abstract class Critter {
 	 * @throws InvalidCritterException 
 	 */
 	public static void worldTimeStep() throws InvalidCritterException {
-		System.out.println(population.size());
+		//System.out.println(population.size());
 		if (firstTime) {												//if this is the first worldTimeStep create world
 			createWorld();
 			firstTime = false;
