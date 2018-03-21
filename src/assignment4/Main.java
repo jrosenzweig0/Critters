@@ -14,6 +14,7 @@ package assignment4;
 
 import java.util.Scanner;
 import java.io.*;
+import java.lang.Integer;
 
 /*
  * Usage: java <pkgname>.Main <input file> test
@@ -69,12 +70,18 @@ public class Main {
         System.out.println("Input a command:");
         boolean quitted = false;
         String command;
-        
+        String[] arguments;
+    	try {
+    		Critter.worldTimeStep();
+    	}
+    	catch (InvalidCritterException e) {
+    		System.out.println("error");
+    	}
         //need to fix but kind of works
         //need to change popuation to private and remake stats 
         while(true){
 			command = kb.nextLine().toLowerCase();	
-			String[] arguments = command.split(" ");
+			arguments = command.split(" ");
 	        switch (arguments[0]) {
 	        case "quit":
 	        	quitted = true;
@@ -83,28 +90,43 @@ public class Main {
 	        	Critter.displayWorld();
 	        	break;
 	        case "step":
-	        	if(false) {
-	        		for(int i = 0; i<kb.nextInt(); i++) {
-	        			Critter.worldTimeStep();
-	        			break;
-	        		}
+	        	try {
+		        	try {
+		        		for(int i = 0; i < Integer.parseInt(arguments[1]); i++) {
+		        			Critter.worldTimeStep();
+		        		}
+		        		break;
+		        	}
+		        	catch(ArrayIndexOutOfBoundsException e){
+		        		Critter.worldTimeStep();
+		        		break;
+		        	}
 	        	}
-	        	else {
-	        		Critter.worldTimeStep();
-	        		break;
+	        	catch (InvalidCritterException e) {
+	        		System.out.println("error");
 	        	}
 	        case "seed":
-	        	Critter.setSeed(kb.nextLong());
+	        	Critter.setSeed(Long.parseLong(arguments[1]));
 	        	break;
 	        case "make":
 	        	try {
-	        		Critter.makeCritter("assignment4.Craig");
-	        		break;
+		        	try {
+		        		for(int i = 0; i < Integer.parseInt(arguments[1]); i++) {
+		        			Critter.makeCritter("assignment4.Craig");
+		        		}
+		        		Critter.makeCritter("assignment4.Craig");
+		        	}
+		        	catch(ArrayIndexOutOfBoundsException e) {
+		        		Critter.makeCritter("assignment4.Craig");
+		        	}
+		        	break;
 	        	}
 	        	catch(InvalidCritterException e) {
 	        		System.out.println(e);
 	        		break;
 	        	}
+	        	
+
 	        	
 	        case "stats":
 	        	Critter.runStats(Critter.population);

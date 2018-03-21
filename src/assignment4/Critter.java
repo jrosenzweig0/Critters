@@ -209,6 +209,7 @@ public abstract class Critter {
 			newCritter.x_coord = Critter.getRandomInt(Params.world_width);
 			newCritter.y_coord = Critter.getRandomInt(Params.world_height);
 			newCritter.energy = Params.start_energy;
+			world.get(newCritter.y_coord).get(newCritter.x_coord).setFilled(newCritter);
 			population.add(newCritter);
 		 }
 		 catch (InvalidCritterException e) {
@@ -329,19 +330,16 @@ public abstract class Critter {
 	public static void clearWorld() {
 		babies.clear();
 		for(int i = 0; i < population.size(); i++) {
+			world.get(population.get(0).y_coord).get(population.get(0).x_coord).remove(population.get(0));
 			population.get(0).death();
-		}
-		for (int i=0; i<Params.world_height; i++){	 					//find any Tile with more than one critter, and have them fight
-			for(int j=0; j<Params.world_width; j++){
-				world.get(i).get(j).setAlgae(false);
-			}
 		}
 	}
 
 	/**
 	 * Calls doTimeStep for each critter in the world, then resolves Tiles with more than one critter
+	 * @throws InvalidCritterException 
 	 */
-	public static void worldTimeStep() {
+	public static void worldTimeStep() throws InvalidCritterException {
 		System.out.println(population.size());
 		if (firstTime) {												//if this is the first worldTimeStep create world
 			createWorld();
@@ -370,7 +368,16 @@ public abstract class Critter {
 				i--;
 			}
 		}
-		//generate algae
+		
+		for(int i = 0; i < Params.refresh_algae_count; i++) {
+			try {
+				makeCritter("assignment4.Algae");
+			}
+			catch(Exception e) {
+				
+			}
+		}
+		
 		for(Critter baby: babies) {
 			baby.warp();
 			population.add(baby);

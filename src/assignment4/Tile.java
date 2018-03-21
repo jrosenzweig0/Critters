@@ -13,7 +13,8 @@ public class Tile {
 	private int x; // the x position of the tile
 	private int y; // the y position of the tile
 	private ArrayList<Critter> filled; // A list of the critters on a particular tile
-	private boolean hasAlgae;
+	//private boolean hasAlgae;
+	
 	
 	public Tile(int x, int y) {
 		this.x = x;
@@ -57,15 +58,15 @@ public class Tile {
 	 * This is a getter method that returns true if there is Algae on the tile
 	 * @return retunrs true or false depending if there is Algae on the tile
 	 */
-	public boolean getAlgae() {
-		return this.hasAlgae;
-	}
+//	public boolean getAlgae() {
+//		return this.hasAlgae;
+//	}
 	
 	/**
 	 * This function sets the value of hasAlgae to a boolean value that you input
 	 * @param z
 	 */
-	public void setAlgae(boolean z) {
-		this.hasAlgae = z;
-	}
+//	public void setAlgae(boolean z) {
+//		this.hasAlgae = z;
+//	}
 }
