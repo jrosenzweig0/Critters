@@ -4,15 +4,17 @@ import assignment4.Critter.TestCritter;
 
 public class MyCritter7 extends TestCritter {
 	public int reproduceLimit;
-	
+
+	public int direction;
 	public MyCritter7() {
-		reproduceLimit = getRandomInt(500);
+		reproduceLimit = getRandomInt(250);
+		direction = getRandomInt(8);
 	}
 	
 	@Override
 	public void doTimeStep() {
 		/* take one step forward */
-		run(getRandomInt(8));
+		walk(direction);
 		
 		if (getEnergy() > reproduceLimit) {
 			MyCritter7 child = new MyCritter7();

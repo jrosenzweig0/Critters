@@ -23,10 +23,12 @@ public class MyCritter1 extends Critter.TestCritter{
 		if (x==0) return (y>0) ? 2 : 6;				//if x is the same go up or down
 		if (y==0) return (x>0) ? 0 : 4;				//if y is the same go left or right
 		double angle;								//get angle
-		if (x>0 && y>0) angle = Math.tan(y/x);		//first quad tan(y/x)
-		else if (x<0 && y>0) angle = Math.tan(y/(-1*x)); //second quad 180-tan(y/(-x))
-		else if (x<0 && y<0) angle = Math.tan((-1*y)/(-1*x)); //third quad 180+tan((-y)/(-x))
-		else angle = Math.tan((-1*y)/x);			//fourth quad 360-tan((-y)/x)
+
+		if (x>0 && y>0) angle = Math.atan(y/x);		//first quad tan(y/x)
+		else if (x<0 && y>0) angle = Math.atan(y/(-1*x)); //second quad 180-tan(y/(-x))
+		else if (x<0 && y<0) angle = Math.atan((-1*y)/(-1*x)); //third quad 180+tan((-y)/(-x))
+		else angle = Math.atan((-1*y)/x);			//fourth quad 360-tan((-y)/x)
+
 		double direc = (angle/(2*Math.PI))*8;		//convert angle to int from 0 to 7
 		int dir = (int)Math.round(direc);
 		if (dir == 8) dir = 0;
@@ -35,13 +37,18 @@ public class MyCritter1 extends Critter.TestCritter{
 
 	@Override
 	public void doTimeStep() {
-		if (this.getEnergy()>=25) {
-			try {																//gets list of My
+
+		if (this.getEnergy()>=15) {
+			try {                                                                //gets list of My
 				List<Critter> friends = Critter.getInstances("assignment4.MyCritter1");
 				double bestDistance = getDist(friends.get(0));
 				int bestFriend = 0;
+				if (friends.get(bestFriend)==this) {
+					bestFriend = 1;
+					bestDistance = getDist(friends.get(bestFriend));
+				}
 				for (int i = 0; i < friends.size(); i++) {
-					if (getDist(friends.get(i)) < bestDistance && friends.get(i) != this) {
+					if (getDist(friends.get(i)) < bestDistance && friends.get(i)!=this) {
 						bestDistance = getDist(friends.get(i));
 						bestFriend = i;
 					}
@@ -54,7 +61,8 @@ public class MyCritter1 extends Critter.TestCritter{
 				e.printStackTrace();
 			}
 		}
-		else if (this.getEnergy()>=120) {
+
+		if (this.getEnergy()>=120) {
 			MyCritter1 baby = new MyCritter1();
 			reproduce(baby,getRandomInt(8));
 		}

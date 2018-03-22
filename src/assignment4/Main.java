@@ -82,8 +82,9 @@ public class Main {
         //need to fix but kind of works
         //need to change popuation to private and remake stats 
         while(true){
-			command = kb.nextLine().toLowerCase();	
+			command = kb.nextLine();	
 			arguments = command.split(" ");
+			arguments[0] = arguments[0].toLowerCase();
 	        switch (arguments[0]) {
 	        case "quit":
 	        	quitted = true;
@@ -132,8 +133,13 @@ public class Main {
 	        	}
 	        
 	        case "stats":
-	        	Critter.runStats(Critter.population);
-	        	break;
+	        	try {
+		        	Critter.runStats(Critter.getInstances("assignment4." + arguments[1]));
+		        	break;
+	        	}
+	        	catch (InvalidCritterException e) {
+	        		System.out.println("Invalid Critter: " +  arguments[1]);
+	        	}
 
 	        
 	        case "animate":
