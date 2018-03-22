@@ -29,7 +29,8 @@ public abstract class Critter {
 	private static Map<Integer, Map<Integer, Tile>> world; //2D map (Since we have 2 keys: x,y) holding the tile objects
 	private static boolean firstTime = true;
 	private boolean hasMoved;
-	private static HashSet<String> critterTypes = new HashSet<String>() {{add("assignment4.Craig"); add("assignment4.Algae");}};
+	private static HashSet<String> critterTypes = new HashSet<String>() {{add("assignment4.Craig"); add("assignment4.Algae");
+	add("assignment4.MyCritter1"); add("assignment4.MyCritter6"); add("assignment4.MyCritter7");}};
 	// Gets the package name.  This assumes that Critter and its subclasses are all in the same package.
 	static {
 		myPackage = Critter.class.getPackage().toString().split(" ")[1];
@@ -222,6 +223,7 @@ public abstract class Critter {
 			newCritter.x_coord = Critter.getRandomInt(Params.world_width);
 			newCritter.y_coord = Critter.getRandomInt(Params.world_height);
 			newCritter.energy = Params.start_energy;
+
 			world.get(newCritter.y_coord).get(newCritter.x_coord).setFilled(newCritter);
 			population.add(newCritter);
 		 }
