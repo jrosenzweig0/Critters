@@ -13,6 +13,7 @@ package assignment4;
  */
 
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 import java.io.*;
 import java.lang.Integer;
 
@@ -124,16 +125,36 @@ public class Main {
 	        		System.out.println(e);
 	        		break;
 	        	}
-	        	
-
-	        	
+	        
 	        case "stats":
 	        	Critter.runStats(Critter.population);
 	        	break;
-	        }
+	        
+	        case "animate":
+	        	while(true) {
+	        		try {
+						TimeUnit.SECONDS.sleep(1);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+		        	try {
+		        		Critter.worldTimeStep();
+		        		Critter.worldTimeStep();
+		        		Critter.worldTimeStep();
+		        		Critter.displayWorld();
+			        }
+		        	catch (InvalidCritterException e) {
+		        		System.out.println("error");
+		        	}
+		        	//System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+	        	}
+	        }	
+	        	
 	        if (quitted) {
 	        	break;
 	        }
+	        
 	        /* Do not alter the code above for your submission. */
 	        /* Write your code below. */
 	        
