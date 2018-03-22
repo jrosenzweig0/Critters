@@ -69,16 +69,10 @@ public class Main {
             kb = new Scanner(System.in); // use keyboard and console
         }
         //parse and make input command
-        System.out.println("Input a command:");
         boolean quitted = false;
         String command;
         String[] arguments;
-    	try {
-    		Critter.worldTimeStep();
-    	}
-    	catch (InvalidCritterException e) {
-    		System.out.println("error");
-    	}
+
         //need to fix but kind of works
         //need to change popuation to private and remake stats 
         while(true){
@@ -87,6 +81,7 @@ public class Main {
 			arguments[0] = arguments[0].toLowerCase();
 	        switch (arguments[0]) {
 	        case "quit":
+	        	Critter.clearWorld();
 	        	quitted = true;
 	        	break;
 	        case "show":
@@ -96,6 +91,8 @@ public class Main {
 	        	try {
 		        	try {
 		        		for(int i = 0; i < Integer.parseInt(arguments[1]); i++) {
+		        			if(i%1000 == 0)
+		        				System.out.println(i);
 		        			Critter.worldTimeStep();
 		        		}
 		        		break;
@@ -114,16 +111,12 @@ public class Main {
 	        case "make":
 	        	try {
 		        	try {
-		        		for(int i = 0; i < Integer.parseInt(arguments[1]); i++) {
-		        			Critter.makeCritter("assignment4.Craig");
-                            Critter.makeCritter("assignment4.MyCritter1");
-                            Critter.makeCritter("assignment4.MyCritter7");
+		        		for(int i = 0; i < Integer.parseInt(arguments[2]); i++) {
+		        			Critter.makeCritter("assignment4."+arguments[1]);
 		        		}
 		        	}
 		        	catch(ArrayIndexOutOfBoundsException e) {
-		        		Critter.makeCritter("assignment4.Craig");
-                        Critter.makeCritter("assignment4.MyCritter1");
-                        Critter.makeCritter("assignment4.MyCritter7");
+		        		Critter.makeCritter("assignment4."+arguments[1]);
 		        	}
 		        	break;
 	        	}

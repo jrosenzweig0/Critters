@@ -30,7 +30,7 @@ public abstract class Critter {
 	private static boolean firstTime = true;
 	private boolean hasMoved;
 	private static HashSet<String> critterTypes = new HashSet<String>() {{add("assignment4.Craig"); add("assignment4.Algae");
-	add("assignment4.MyCritter1"); add("assignment4.MyCritter6"); add("assignment4.MyCritter7");}};
+	add("assignment4.MyCritter1"); add("assignment4.MyCritter6"); add("assignment4.Critter3");}};
 	// Gets the package name.  This assumes that Critter and its subclasses are all in the same package.
 	static {
 		myPackage = Critter.class.getPackage().toString().split(" ")[1];
@@ -153,23 +153,34 @@ public abstract class Critter {
 	 * @param B Critter encountering A
 	 */
 	private static void encounter(Critter A, Critter B){
-		if(A.toString() == ".") {
+		if(A.toString() == "@") {
 			B.energy += A.energy/2;
 			A.death();
-			//System.out.println("I ate an algee most likley");
 			return;
 		}
-		if(B.toString() == ".") {
+		if(B.toString() == "@") {
 			A.energy += B.energy/2;
 			B.death();
-			//System.out.println("I ate an algee most likley");
 			return;
 		}
+	
 		if(!A.fight(B.toString())) {				//Determine if A will run or fight
+			int xCoordBackup = A.x_coord;
+			int yCoordBackup = A.y_coord;
 			A.run(getRandomInt(8));
+			if(world.get(A.y_coord).get(A.x_coord).crittersOnTile().size()>1) {
+				A.x_coord = xCoordBackup;
+				A.y_coord = yCoordBackup;
+			}
 		}
 		if(!B.fight(A.toString())) {				//Determine if B will run or fight
+			int xCoordBackup = A.x_coord;
+			int yCoordBackup = A.y_coord;
 			B.run(getRandomInt(8));
+			if(world.get(A.y_coord).get(A.x_coord).crittersOnTile().size()>1) {
+				B.x_coord = xCoordBackup;
+				B.y_coord = yCoordBackup;
+			}
 		}
 		if(A.x_coord == B.x_coord && A.y_coord == B.y_coord) {
 
@@ -212,6 +223,10 @@ public abstract class Critter {
 	 * @throws InvalidCritterException
 	 */
 	 public static void makeCritter(String critter_class_name) throws InvalidCritterException {
+		if (firstTime) {												//if this is the first worldTimeStep create world
+			createWorld();
+			firstTime = false;
+		}
 
 		 try{
 			if(!critterTypes.contains(critter_class_name)) {
@@ -360,9 +375,10 @@ public abstract class Critter {
 	 */
 	public static void clearWorld() {
 		babies.clear();
-		for(int i = 0; i < population.size(); i++) {
-			world.get(population.get(0).y_coord).get(population.get(0).x_coord).remove(population.get(0));
-			population.get(0).death();
+		for (int i=0; i<Params.world_height; i++){						//find any Tile with more than one critter, and have them fight
+			for(int j=0; j<Params.world_width; j++){
+				world.get(i).get(j).clearTile();
+			}
 		}
 	}
 
@@ -374,7 +390,6 @@ public abstract class Critter {
 		//System.out.println(population.size());
 		if (firstTime) {												//if this is the first worldTimeStep create world
 			createWorld();
-			firstTime = false;
 		}
 		for (int i=0; i<population.size(); i++){//call each Critter's doTimeStep
 			population.get(i).hasMoved = false;
@@ -399,7 +414,7 @@ public abstract class Critter {
 				i--;
 			}
 		}
-		
+
 		for(int i = 0; i < Params.refresh_algae_count; i++) {
 			try {
 				makeCritter("assignment4.Algae");
@@ -409,15 +424,22 @@ public abstract class Critter {
 			}
 		}
 		
+		
 		for(Critter baby: babies) {
 			baby.warp();
 			population.add(baby);
+			world.get(baby.y_coord).get(baby.x_coord).setFilled(baby);
 		}
 		babies.clear();
 		
+		firstTime = false;
 	}
 
 	public static void displayWorld() {
+		if (firstTime) {												//if this is the first worldTimeStep create world
+			createWorld();
+			firstTime = false;
+		}
 		System.out.print('+');												//Prints frame
 		for(int i=0; i<Params.world_width; i++){System.out.print('-');}
 		System.out.println('+');
