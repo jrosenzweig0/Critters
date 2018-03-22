@@ -12,6 +12,7 @@ package assignment4;
  * Fall 2016
  */
 
+import java.util.List;
 import java.util.Scanner;
 import java.io.*;
 import java.lang.Integer;
@@ -113,10 +114,12 @@ public class Main {
 		        	try {
 		        		for(int i = 0; i < Integer.parseInt(arguments[1]); i++) {
 		        			Critter.makeCritter("assignment4.Craig");
+                            Critter.makeCritter("assignment4.MyCritter1");
 		        		}
 		        	}
 		        	catch(ArrayIndexOutOfBoundsException e) {
 		        		Critter.makeCritter("assignment4.Craig");
+                        Critter.makeCritter("assignment4.MyCritter1");
 		        	}
 		        	break;
 	        	}
@@ -131,6 +134,7 @@ public class Main {
 	        	Critter.runStats(Critter.population);
 	        	break;
 	        }
+
 	        if (quitted) {
 	        	break;
 	        }
