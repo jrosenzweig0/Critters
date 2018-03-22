@@ -152,13 +152,13 @@ public abstract class Critter {
 	 * @param B Critter encountering A
 	 */
 	private static void encounter(Critter A, Critter B){
-		if(A.toString() == "@") {
+		if(A.toString() == ".") {
 			B.energy += A.energy/2;
 			A.death();
 			//System.out.println("I ate an algee most likley");
 			return;
 		}
-		if(B.toString() == "@") {
+		if(B.toString() == ".") {
 			A.energy += B.energy/2;
 			B.death();
 			//System.out.println("I ate an algee most likley");
