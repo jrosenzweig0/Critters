@@ -24,7 +24,7 @@ import java.lang.reflect.Constructor;
 
 public abstract class Critter {
 	private static String myPackage;
-	public	static List<Critter> population = new java.util.ArrayList<Critter>();
+	private	static List<Critter> population = new java.util.ArrayList<Critter>();
 	private static List<Critter> babies = new java.util.ArrayList<Critter>();
 	private static Map<Integer, Map<Integer, Tile>> world; //2D map (Since we have 2 keys: x,y) holding the tile objects
 	private static boolean firstTime = true;
