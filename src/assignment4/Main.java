@@ -12,6 +12,7 @@ package assignment4;
  * Fall 2016
  */
 
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.io.*;
@@ -114,10 +115,14 @@ public class Main {
 		        	try {
 		        		for(int i = 0; i < Integer.parseInt(arguments[1]); i++) {
 		        			Critter.makeCritter("assignment4.Craig");
+                            Critter.makeCritter("assignment4.MyCritter1");
+                            Critter.makeCritter("assignment4.MyCritter7");
 		        		}
 		        	}
 		        	catch(ArrayIndexOutOfBoundsException e) {
 		        		Critter.makeCritter("assignment4.Craig");
+                        Critter.makeCritter("assignment4.MyCritter1");
+                        Critter.makeCritter("assignment4.MyCritter7");
 		        	}
 		        	break;
 	        	}
@@ -129,6 +134,7 @@ public class Main {
 	        case "stats":
 	        	Critter.runStats(Critter.population);
 	        	break;
+
 	        
 	        case "animate":
 	        	while(true) {
@@ -140,8 +146,6 @@ public class Main {
 					}
 		        	try {
 		        		Critter.worldTimeStep();
-		        		Critter.worldTimeStep();
-		        		Critter.worldTimeStep();
 		        		Critter.displayWorld();
 			        }
 		        	catch (InvalidCritterException e) {
@@ -150,7 +154,7 @@ public class Main {
 		        	//System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 	        	}
 	        }	
-	        	
+
 	        if (quitted) {
 	        	break;
 	        }
