@@ -1,33 +1,35 @@
 package assignment4;
 
 import assignment4.Critter.TestCritter;
+
 /**
- * Critter3 chooses a direction and moves in that direction every turn. When the constructor is called there is a
- * 50% chance that the critter gets a reproduce energy of 50 and a 50% chance that it gets a reproduce energy of 200. 
- * This is so that some of the critters will be strong and win fights and others will be weak and used solely for the purpose of reproduction. 
- * The critters with 50 energy are assigned the toString value of b and the ones with 200 reproduce energy have the toString value of B.  
- * The critter waits until the percentage of Algae on the screen is 6% before it starts moving.
+ * This critter has a 5% chance of reproducing an impotent critter (A critter that does not reproduce)
+ * this critter runs if is high on energy and walks if it is low on energy
+ * This critter waits untill the percentage of algae on the screen is greater than 4%
  * @author jonathan
  *
  */
-public class Critter3 extends TestCritter {
+public class Critter4 extends TestCritter {
 	private int reproduceLimit; //the energy it needs to have for it to reproduce 
 	private double algae; // the percentage of algae in the world. a number between 0 and 1
 	private boolean hasmoved; //says whether or not a critter has moved
-	public int direction; //the direction that the critter will move in
+	public boolean reproduce; //true if it can reproduce 
+	
 	/**
-	 * Constructor method for Critter3 it sets the parameters
+	 * This is the constructor for the critter it sets the constants
 	 */
-	public Critter3() {
-		if(getRandomInt(2) == 0) {
-			reproduceLimit=50;
+	public Critter4() {
+		if(getRandomInt(20) == 0) {
+			reproduce = false;
 		}
-		else {
-			reproduceLimit = 200;
+		else{
+			reproduce = true; // sets the reproduce flag to true
 		}
-		direction = getRandomInt(8);
+		reproduceLimit = 120; //set reproduce energy to 120
+
+
 	}
-	 
+	  
 	@Override
 	/**
 	 * This method does the time step for the critter.
@@ -39,12 +41,13 @@ public class Critter3 extends TestCritter {
 		} catch (InvalidCritterException e) {
 			algae = 1.0;
 		}
-		if(algae > 0.06) {
-			walk(direction);
-			hasmoved = true;
+		if(algae > 0.04) { //it only moves if there is more than 4% algae in the world
+			if(this.getEnergy()>50) run(getRandomInt(8)); //runs if energy is high
+			else walk(getRandomInt(8)); //walks if energy is low
+			hasmoved = true; // sets the hasmoved flag to true so that it does not try and run in the fight
 		}
 		
-		if (getEnergy() > reproduceLimit) {
+		if (getEnergy() > reproduceLimit && reproduce) {
 			Critter3 child = new Critter3();
 			reproduce(child, Critter.getRandomInt(8));
 		}
@@ -74,10 +77,7 @@ public class Critter3 extends TestCritter {
 	 * @return returns a character representing what it will look like on the grid
 	 */
 	public String toString () {
-		if(reproduceLimit == 50)
-			return "b";
-		else
-			return "B";
+		return "A";
 	}
 	/**
 	 * This method displays some stats about the critter
@@ -87,12 +87,12 @@ public class Critter3 extends TestCritter {
 	public static void runStats(java.util.List<Critter> My1s) {
 		int total=0;
 		for (int i=0; i<My1s.size(); i++){
-			if(My1s.get(i).toString() == "B")
+			if(((Critter4)My1s.get(i)).reproduce)
 				total += 1;
 		}
 		int total1 = My1s.size() - total;
 		System.out.print("" + My1s.size() + " total Critter1s    ");
-		System.out.println(" with " + total + " B's and " + total1 + " b's");
+		System.out.println(" with " + total + " reproducers and " + total1 + " impotants");
 	}
 
 }

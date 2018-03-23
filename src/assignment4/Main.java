@@ -80,107 +80,152 @@ public class Main {
         String command;
         String[] arguments;
 
-        //need to fix but kind of works
-        //need to change popuation to private and remake stats
-        while (true) {
-            command = kb.nextLine();
-            arguments = command.split(" ");
-            arguments[0] = arguments[0].toLowerCase();
-            switch (arguments[0]) {
-                case "quit":
-                    Critter.clearWorld();
-                    quitted = true;
-                    break;
-                case "show":
-                    Critter.displayWorld();
-                    break;
-                case "step":
-                    try {
-                        try {
-                            for (int i = 0; i < Integer.parseInt(arguments[1]); i++) {
-                                if (i % 1000 == 0) System.out.println(i);
-                                Critter.worldTimeStep();
-                            }
-                            break;
-                        } catch (ArrayIndexOutOfBoundsException e) {
-                            Critter.worldTimeStep();
-                            break;
-                        }
-                        catch(NumberFormatException e){
-                            System.out.println("error processing: "+ command);
-                            break;
-                        }
-                    } catch (InvalidCritterException e) {
-                        System.out.println("error");
-                        break;
-                    }
-                case "seed":
-                    Critter.setSeed(Long.parseLong(arguments[1]));
-                    break;
-                case "make":
-                    try {
-                        try {
-                            for (int i = 0; i < Integer.parseInt(arguments[2]); i++) {
-                                Critter.makeCritter("assignment4." + arguments[1]);
-                            }
-                        }
-                        catch (ArrayIndexOutOfBoundsException e) {
-                            Critter.makeCritter("assignment4." + arguments[1]);
-                        }
-                        break;
-                    }
-                    catch (InvalidCritterException e) {
-                        System.out.println(e);
-                        break;
-                    }
-                case "stats":
-                    try {
-                        if (!(critterTypes.contains("assignment4." + arguments[1]))) {//if invalid type throw invalid critter exception
-                            throw new InvalidCritterException(arguments[1]);
-                        }
-                        List<Critter> crits = Critter.getInstances("assignment4." + arguments[1]);
-                        Class<?> critterClass = Class.forName("assignment4." + arguments[1]); //get class corresponding to critter_class_name
-                        Method m[] = critterClass.getDeclaredMethods();
-                        for (int i=0; i<m.length; i++){
-                            if (m[i].getName().equals("runStats")){
-                                try{
-                                    m[i].invoke(critterClass, crits);
-                                }
-                                catch(InvocationTargetException e){
-                                    System.out.println(e);
-                                }
-                            }
-                        }
-
-                    } catch (InvalidCritterException e) {
-                        System.out.println("Invalid Critter: " + arguments[1]);
-                    } catch (Exception e) {                                            //if other exception print stack trace
-                        e.printStackTrace();
-                    }
-                    break;
-                case "animate":
-                    while (true) {
-                        try {
-                            TimeUnit.SECONDS.sleep(1);
-                        }
-                        catch (InterruptedException e1) {
-                            e1.printStackTrace();
-                        }
-                        try {
-                            Critter.worldTimeStep();
-                            Critter.displayWorld();
-                        }
-                        catch (InvalidCritterException e) {
-                            System.out.println("error");
-                        }
-                    }
+        while (true) { 													//An infinite loop so that you can enter multiple commands
+            command = kb.nextLine();									//Reads the next line on the keyboard
+            arguments = command.split(" ");								//parses the input
+            arguments[0] = arguments[0].toLowerCase();					
+            if(!commands.contains(arguments[0])) {						//error handling if the command is not a valid one 
+            	System.out.println("invalid command: " + command);		
+            	continue;
             }
-            if (quitted) {
-                    break;
+            if(arguments.length <= 3) {									// just in case they are entering junk at the end. no valid command is larger than 3 words
+	            switch (arguments[0]) {
+	            	//Terminates the program
+	                case "quit":
+	                	try {
+	                		if(arguments.length>1) throw new Exception();
+		                    Critter.clearWorld();
+		                    quitted = true;
+		                    break;
+	                	}
+	                	catch(Exception e){
+	                		System.out.println("error processing: " + command);
+	                		break;
+	                	}
+	                //displays the world on the console
+	                case "show":
+	                	try {
+	                		if(arguments.length>1) throw new Exception();
+		                    Critter.displayWorld();
+		                    break;
+	                	}
+	                	catch(Exception e) {
+	                		System.out.println("error processing: " + command);
+	                		break;
+	                	}
+	                //Performs one world time step if no number is entered after step. if there is a number it will perform that many time steps
+	                case "step":
+	                    try {
+	                        try {
+	                            for (int i = 0; i < Integer.parseInt(arguments[1]); i++) {
+	                                Critter.worldTimeStep();
+	                            }
+	                            break;
+	                        } catch (ArrayIndexOutOfBoundsException e) {
+	                            Critter.worldTimeStep();
+	                            break;
+	                        }
+	                        catch(NumberFormatException e){
+	                        	System.out.println("error processing: " + command);
+	                        	break;
+	                        }
+	                    } catch (InvalidCritterException e) {
+	                        System.out.println("error");
+	                        break;
+	                    }
+	                //specifies the seed for the random number generator
+	                case "seed":
+	                	try {
+		                    Critter.setSeed(Long.parseLong(arguments[1]));
+		                    break;
+	                	}
+		                catch(NumberFormatException e) {
+		                	System.out.println("error processing: " + command);
+		                	break;
+		                }
+	                //creates a critter 
+	                //must specify the type of critter it makes after the word make
+	                //optionally you can ad an int after to say how many of them you want to make if no int is specified it will make 1
+	                case "make":
+	                    try {
+	                        try {
+	                            for (int i = 0; i < Integer.parseInt(arguments[2]); i++) {
+	                                Critter.makeCritter("assignment4." + arguments[1]);
+	                            }
+	                            break;
+	                        }
+	                        catch (ArrayIndexOutOfBoundsException e) {
+	                            Critter.makeCritter("assignment4." + arguments[1]);
+	                            break;
+	                        }
+	                        catch(NumberFormatException e) {
+	                        	System.out.println("error processing: " + command);
+	                        	break;
+	                        }
+	
+	                    }
+	                    catch (InvalidCritterException e) {
+                            System.out.println("error processing: " + command);
+	                        break;
+	                    }
+	                //Shows the stats for a specific critter
+	                //must enter the name of the critter after the word stats
+	                case "stats":
+	                    try {
+	                        if (!(critterTypes.contains("assignment4." + arguments[1]))) {//if invalid type throw invalid critter exception
+	                            throw new InvalidCritterException(arguments[1]);
+	                        }
+	                        List<Critter> crits = Critter.getInstances("assignment4." + arguments[1]);
+	                        Class<?> critterClass = Class.forName("assignment4." + arguments[1]); //get class corresponding to critter_class_name
+	                        Method m[] = critterClass.getDeclaredMethods();
+	                        for (int i=0; i<m.length; i++){
+	                            if (m[i].getName().equals("runStats")){
+	                                try{
+	                                    m[i].invoke(critterClass, crits);
+	                                }
+	                                catch(InvocationTargetException e){
+	    	                            System.out.println("error processing: " + command);
+	                                }
+	                            }
+	                        }
+	
+	                    } catch (InvalidCritterException e) {
+                            System.out.println("error processing: " + command);
+	                    } catch (Exception e) {                                            //if other exception print stack trace
+                            System.out.println("error processing: " + command);
+	                    }
+	                    break;
+	                //this command animates the world
+	                //it performs one time step and one show world every second
+	                case "animate":
+	                    while (true) {
+	                        try {
+	                            TimeUnit.SECONDS.sleep(1);
+	                        }
+	                        catch (InterruptedException e1) {
+	                            System.out.println("error processing: " + command);
+	                        }
+	                        try {
+	                            Critter.worldTimeStep();
+	                            Critter.displayWorld();
+	                        }
+	                        catch (InvalidCritterException e) {
+	                            System.out.println("error processing: " + command);
+	                        }
+	                    }
+	            }
+            }
+            else {
+                System.out.println("error processing: " + command);
+            }
+            if (quitted) { //breaks out of the while loop if the command quit was entered
+            	break;
             }
         }
     }
-    private static HashSet<String> critterTypes = new HashSet<String>() {{add("assignment4.Craig"); add("assignment4.Algae");
-        add("assignment4.Critter1"); add("assignment4.Critter2"); add("assignment4.Critter3");}};
+    private static HashSet<String> critterTypes = new HashSet<String>() {{add("assignment4.Craig"); add("assignment4.Algae"); //a set of all the different critter types
+        add("assignment4.Critter1"); add("assignment4.Critter2"); add("assignment4.Critter3"); add("assignment4.Critter4");}}; //a set of all possible commands
+    private static HashSet<String> commands = new HashSet<String>() {{add("make"); add("stats");
+        add("seed"); add("step"); add("animate"); add("show");add("quit");}};
 
 }
