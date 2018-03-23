@@ -1,5 +1,16 @@
 package assignment4;
-
+/* CRITTERS Tile.java
+ * EE422C Project 4 submission by
+ * Replace <...> with your actual data.
+ * <Jonathan Rosenzweig>
+ * <JJR3349>
+ * <15466>
+ * <Student2 Zach Sisti>
+ * <Student2 zes279>
+ * <15495>
+ * Slip days used: <0>
+ * Fall 2016
+ */
 import java.util.*;
 
 /**
@@ -54,6 +65,10 @@ public class Tile {
 	public void remove(Critter dead){
 		this.filled.remove(dead);
 	}
+
+	/**
+	 * This method removes all the critters from the tile
+	 */
 	public void clearTile() {
 		this.filled.clear();
 	}

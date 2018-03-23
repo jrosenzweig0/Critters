@@ -1,10 +1,28 @@
+/* CRITTERS Critter1.java
+ * EE422C Project 4 submission by
+ * Replace <...> with your actual data.
+ * <Jonathan Rosenzweig>
+ * <JJR3349>
+ * <15466>
+ * <Student2 Zach Sisti>
+ * <Student2 zes279>
+ * <15495>
+ * Slip days used: <0>
+ * Fall 2016
+ *
+ * Critter1's main behavior is to go toward more Critter1s. Using getInstances it retrieves a list of all Critter1s, it then determines
+ * which Critter1 is closest using the distance formula. From there it uses trig to determine the angle between it and the other Critter1,
+ * and then scales that from 0-7 and walks that way. Other than that it walks every turn, reproduces when it has >=100 energy, and does not
+ * attack other Critter1's.
+ */
+
 package assignment4;
 
 import java.util.*;
 
 import static java.lang.Math.*;
 
-public class MyCritter1 extends Critter.TestCritter{
+public class Critter1 extends Critter.TestCritter{
 
 	/**
 	 * gets the distance to another Critter using the distance formula
@@ -12,7 +30,7 @@ public class MyCritter1 extends Critter.TestCritter{
 	 * @return double representing distance to friend
 	 */
 	public double getDist(Critter friend){
-		MyCritter1 fr = (MyCritter1)friend;							//cast to MyCritter1
+		Critter1 fr = (Critter1)friend;							//cast to Critter1
 		double distance = sqrt((fr.getX_coord()-this.getX_coord())*(fr.getX_coord()-this.getX_coord())+	//distance formula
 				(fr.getY_coord()-this.getY_coord())*(fr.getY_coord()-this.getY_coord()));
 		return distance;
@@ -24,7 +42,7 @@ public class MyCritter1 extends Critter.TestCritter{
 	 * @return int from 0-8 representing direction that friend is in
 	 */
 	public int getDirec(Critter friend){
-		MyCritter1 fr = (MyCritter1)friend;							//cast to MyCritter1
+		Critter1 fr = (Critter1)friend;							//cast to Critter1
 		double x = (double)(fr.getX_coord()-this.getX_coord());		//+ means to the right, - means to the left
 		double y = (double)(this.getY_coord()-this.getY_coord());		//+ means up, - means down
 		if (x==0 && y==0) return getRandomInt(8); //if in the same tile go in a random direcion
@@ -55,26 +73,26 @@ public class MyCritter1 extends Critter.TestCritter{
 	}
 
 	/**
-	 * determines if and how MyCritter1 will walk and reproduce each time step
+	 * determines if and how Critter1 will walk and reproduce each time step
 	 */
 	@Override
 	public void doTimeStep() {
-		try {                                                                //gets list of MyCritter1s
-				List<Critter> friends = Critter.getInstances("assignment4.MyCritter1");
-				double bestDistance = getDist(friends.get(0));					//double representing distance to closest MyCritter1
-				int bestFriend = 0;												//index of closest MyCritter1 in friends
+		try {                                                                //gets list of Critter1s
+				List<Critter> friends = Critter.getInstances("assignment4.Critter1");
+				double bestDistance = getDist(friends.get(0));					//double representing distance to closest Critter1
+				int bestFriend = 0;												//index of closest Critter1 in friends
 				if ((friends.get(bestFriend) == this)&&(friends.size()>1)) {	//makes start Critter!=this
 					bestFriend = 1;
 					bestDistance = getDist( friends.get(bestFriend));
 				}
-				for (int i = 0; i < friends.size(); i++) {						//checks all MyCritter1s to find closest
+				for (int i = 0; i < friends.size(); i++) {						//checks all Critter1s to find closest
 					if (getDist(friends.get(i)) < bestDistance && friends.get(i) != this) {
 						bestDistance = getDist(friends.get(i));
 						bestFriend = i;
 					}
 				}
-				Critter bFriend = friends.get(bestFriend);						//Critter representing closest MyCritter1
-				if (bFriend==this) walk(getRandomInt(8));					//if this is the only MyCritter1, walk in random direction
+				Critter bFriend = friends.get(bestFriend);						//Critter representing closest Critter1
+				if (bFriend==this) walk(getRandomInt(8));					//if this is the only Critter1, walk in random direction
 				else walk(getDirec(bFriend));									//if not walk toward nearest Critter
 			} catch (InvalidCritterException e) {                                //if InvalidCritterException print it
 				System.out.println(e);
@@ -82,34 +100,38 @@ public class MyCritter1 extends Critter.TestCritter{
 				e.printStackTrace();
 			}
 		if (this.getEnergy()>=100) {											//if energy is above threshold (120) reproduce
-			MyCritter1 baby = new MyCritter1();
+			Critter1 baby = new Critter1();
 			reproduce(baby,getRandomInt(8));
 		}
 	}
 
 	/**
-	 * Determines if MyCritter1 will fight
+	 * Determines if Critter1 will fight
 	 * @param opponent String representing opponents Class symbol
-	 * @return boolean representing MyCritter1's willingness to fight
+	 * @return boolean representing Critter1's willingness to fight
 	 */
 	@Override
 	public boolean fight(String opponent) {
-		if ((getEnergy() > 10) && (!opponent.equals("Z"))) return true;			//if energy is above threshold (10) and opponent is not a MyCritter1 fight
+		if ((getEnergy() > 10) && (!opponent.equals("Z"))) return true;			//if energy is above threshold (10) and opponent is not a Critter1 fight
 		return false;
 	}
 
-	public static void runStats(java.util.List<Critter> My1s) {
-		int total=0;
-		for (int i=0; i<My1s.size(); i++){
-			total+=My1s.get(i).getEnergy();
+	/**
+	 * Function which prints stats about Critter1s
+	 * @param ones List of Critters of type Critter1
+	 */
+	public static void runStats(java.util.List<Critter> ones) {
+		int total=0;									//total energy amassed by all Critter1s
+		for (int i=0; i<ones.size(); i++){
+			total+=ones.get(i).getEnergy();
 		}
-		System.out.print("" + My1s.size() + " total Critter1s    ");
-		System.out.println(" with an average of " + total/(My1s.size()) + "  energy");
+		System.out.print("" + ones.size() + " total Critter1s    ");		//print size and average energy
+		System.out.println(" with an average of " + total/(ones.size()) + "  energy");
 	}
 
 	/**
-	 * gets symbol of MyCritter1
-	 * @return String representing symbol of MyCritter1
+	 * gets symbol of Critter1
+	 * @return String representing symbol of Critter1
 	 */
 	public String toString() {
 		return "Z";

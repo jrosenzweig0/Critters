@@ -5,9 +5,9 @@ package assignment4;
  * <Jonathan Rosenzweig>
  * <JJR3349>
  * <15466>
- * <Student2 Name>
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
+ * <Student2 Zach Sisti>
+ * <Student2 zes279>
+ * <15495>
  * Slip days used: <0>
  * Fall 2016
  */
@@ -106,8 +106,13 @@ public class Main {
                             Critter.worldTimeStep();
                             break;
                         }
+                        catch(NumberFormatException e){
+                            System.out.println("error processing: "+ command);
+                            break;
+                        }
                     } catch (InvalidCritterException e) {
                         System.out.println("error");
+                        break;
                     }
                 case "seed":
                     Critter.setSeed(Long.parseLong(arguments[1]));

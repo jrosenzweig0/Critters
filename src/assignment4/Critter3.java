@@ -1,4 +1,16 @@
 package assignment4;
+/* CRITTERS Critter3.java
+ * EE422C Project 4 submission by
+ * Replace <...> with your actual data.
+ * <Jonathan Rosenzweig>
+ * <JJR3349>
+ * <15466>
+ * <Student2 Zach Sisti>
+ * <Student2 zes279>
+ * <15495>
+ * Slip days used: <0>
+ * Fall 2016
+ */
 
 import assignment4.Critter.TestCritter;
 

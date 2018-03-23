@@ -1,3 +1,19 @@
+/* CRITTERS Critter2.java
+ * EE422C Project 4 submission by
+ * Replace <...> with your actual data.
+ * <Jonathan Rosenzweig>
+ * <JJR3349>
+ * <15466>
+ * <Student2 Zach Sisti>
+ * <Student2 zes279>
+ * <15495>
+ * Slip days used: <0>
+ * Fall 2016
+ *
+ * Critter2 boosts it's energy by 50% when it enters a fight, and returns then loses 75% of that original energy after the fight.
+ * It also does not move very frequently, only doing so when it has less than 25 energy. It also reproduces when it has 60 or more energy
+ */
+
 package assignment4;
 
 import assignment4.Critter.TestCritter;
@@ -6,18 +22,19 @@ import java.util.*;
 
 import static java.lang.Math.*;
 
-public class MyCritter6 extends TestCritter {
+public class Critter2 extends TestCritter {
+
 	/**
 	 * construct sets fought to 0
 	 */
-
-	public MyCritter6(){
+	private Critter2(){
 		fought=0;
 	}
-	private int fought;		//energy to be deducted at the beginning of the next time step (70% of energy at the time of the previous turn's fight)
+	private int fought;
+	//energy to be deducted at the beginning of the next time step (70% of energy at the time of the previous turn's fight)
 
 	/**
-	 * Determines if and how MyCritter6 will walk and reproduce (and lose energy if fought last turn) each timestep
+	 * Determines if and how Critter2 will walk and reproduce (and lose energy if fought last turn) each timestep
 	 */
 	@Override
 	public void doTimeStep() {
@@ -29,15 +46,15 @@ public class MyCritter6 extends TestCritter {
 			walk(getRandomInt(8));
 		}
 		if (getEnergy()>=60){				//only reproduce if energy is above threshold (120)
-			MyCritter6 child = new MyCritter6();
+			Critter2 child = new Critter2();
 			reproduce(child, getRandomInt(8));
 		}
 	}
 
 	/**
-	 * Determines if MyCritter6 will fight
+	 * Determines if Critter2 will fight
 	 * @param opponent String representing opponent Class symbol
-	 * @return boolean indicating if MyCritter6 will fight
+	 * @return boolean indicating if Critter2 will fight
 	 */
 	@Override
 	public boolean fight(String opponent) {
@@ -50,22 +67,26 @@ public class MyCritter6 extends TestCritter {
 	}
 
 	/**
-	 * gets symbol of MyCritter6
-	 * @return String representing symbol of MyCritter6
+	 * gets symbol of Critter2
+	 * @return String representing symbol of Critter2
 	 */
 	@Override
 	public String toString () {
-		return "!";
+		return "*";
 	}
 
-	public static void runStats(java.util.List<Critter> My6s) {
-		int g100 = 0;
-		int l30 = 0;
-		for (int i=0; i<My6s.size(); i++){
-			if (My6s.get(i).getEnergy()>=100) g100++;
-			if (My6s.get(i).getEnergy()<30) l30++;
+	/**
+	 * Function returns stats of Critter2s
+	 * @param sixes List of all Critter2s
+	 */
+	public static void runStats(java.util.List<Critter> sixes) {
+		int g100 = 0;				//number of Critter2s with > 100 energy
+		int l30 = 0;				//number of Critter2s with < 30 energy
+		for (int i=0; i<sixes.size(); i++){				//go through list and increment g100 and l30 accordingly
+			if (sixes.get(i).getEnergy()>=100) g100++;
+			if (sixes.get(i).getEnergy()<30) l30++;
 		}
-		System.out.print("" + My6s.size() + " total Critter6s    ");
+		System.out.print("" + sixes.size() + " total Critter6s    ");		//print size and number of thriving and failing Critter2s
 		System.out.println("" + g100 + " thriving, and " + l30 + " on death's door");
 	}
 }
