@@ -24,7 +24,7 @@ public abstract class Critter {
 	private static boolean firstTime = true;					//lets program know to call createWorld()
 	private boolean hasMoved;									//says if Critter has moved thus far this turn
 	private static HashSet<String> critterTypes = new HashSet<String>() {{add("assignment4.Craig"); add("assignment4.Algae");
-	add("assignment4.Critter1"); add("assignment4.Critter2"); add("assignment4.Critter3");}};	//holds critterTypes
+	add("assignment4.Critter1"); add("assignment4.Critter2"); add("assignment4.Critter3");add("assignment4.Critter4");}};	//holds critterTypes
 	static {				// Gets the package name.  This assumes that Critter and its subclasses are all in the same package.
 		myPackage = Critter.class.getPackage().toString().split(" ")[1];
 	}

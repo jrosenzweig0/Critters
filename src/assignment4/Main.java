@@ -118,8 +118,11 @@ public class Main {
 	                    try {
 	                        try {
 	                            for (int i = 0; i < Integer.parseInt(arguments[1]); i++) {
+	                            	
 	                                Critter.worldTimeStep();
+		                            System.out.println(i);
 	                            }
+	                            System.out.println("done");
 	                            break;
 	                        } catch (ArrayIndexOutOfBoundsException e) {
 	                            Critter.worldTimeStep();

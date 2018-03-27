@@ -27,7 +27,7 @@ public class Critter2 extends TestCritter {
 	/**
 	 * construct sets fought to 0
 	 */
-	private Critter2(){
+	public Critter2(){
 		fought=0;
 	}
 	private int fought;
